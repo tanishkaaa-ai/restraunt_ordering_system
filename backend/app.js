@@ -4,6 +4,8 @@ import connectDB from "./config/mongoose-connect.js";
 import authRoutes from "./routes/authRouter.js";
 import auth from "./middlewares/auth-middleware.js";
 import menuRoutes from "./routes/menuRouter.js";
+import orderRoutes from "./routes/orderRouter.js";
+
 dotenv.config();
 const app = express();
 
@@ -32,6 +34,8 @@ app.get("/protected-test", auth, (req, res) => {
 
 
 app.use("/menu", menuRoutes);
+
+app.use("/order", orderRoutes);
 
 // const express = require("express");
 // const connectDB = require("./config/mongoose-connect");
