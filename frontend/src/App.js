@@ -1,27 +1,27 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
+// Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-// Landing
+// Landing & Role Pages
 import Landing from "./pages/Home/Landing";
-
-// Role selection
 import UserTypeSelect from "./pages/Login/UserTypeSelect";
 
-// Customer Authentication
+// Customer Auth
 import CustomerAuth from "./pages/Login/CustomerAuth";
 import CustomerLogin from "./pages/Login/CustomerLogin";
 import CustomerSignup from "./pages/Login/CustomerSignup";
 
-// Staff Login Pages
+// Staff Auth
 import StaffPortal from "./pages/Login/StaffPortal";
+import StaffAuth from "./pages/Login/StaffAuth";
 import AdminLogin from "./pages/Login/AdminLogin";
 import ChefLogin from "./pages/Login/ChefLogin";
 import DeliveryLogin from "./pages/Login/DeliveryLogin";
 
-// Customer Pages (protected)
+// Customer Pages
 import Menu from "./pages/Menu/Menu";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
@@ -37,34 +37,28 @@ function App() {
       <Navbar />
 
       <Routes>
-
         {/* Landing */}
         <Route path="/" element={<Landing />} />
 
-        {/* Role Selection */}
+        {/* Choose Customer or Staff */}
         <Route path="/select" element={<UserTypeSelect />} />
 
-        {/* Customer Flow */}
+        {/* Customer Authentication */}
         <Route path="/customer-auth" element={<CustomerAuth />} />
         <Route path="/login" element={<CustomerLogin />} />
         <Route path="/signup" element={<CustomerSignup />} />
 
-        {/* Staff Flow */}
+        {/* Staff Authentication */}
         <Route path="/staff" element={<StaffPortal />} />
+        <Route path="/staff/auth" element={<StaffAuth />} />
         <Route path="/staff/admin" element={<AdminLogin />} />
         <Route path="/staff/chef" element={<ChefLogin />} />
         <Route path="/staff/delivery" element={<DeliveryLogin />} />
 
-        {/* PROTECTED CUSTOMER ROUTES */}
-        <Route
-          path="/menu"
-          element={
-            <ProtectedRoute>
-              <Menu />
-            </ProtectedRoute>
-          }
-        />
+        {/* PUBLIC MENU PAGE (not protected) */}
+        <Route path="/menu" element={<Menu />} />
 
+        {/* PROTECTED CUSTOMER ROUTES */}
         <Route
           path="/cart"
           element={
