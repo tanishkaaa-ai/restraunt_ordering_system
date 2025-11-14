@@ -1,26 +1,32 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-// Layout Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-// Pages
+// Landing
 import Landing from "./pages/Home/Landing";
-import CustomerRegister from "./pages/Register/CustomerRegister";
-import CustomerLogin from "./pages/Login/CustomerLogin";
 
+// Role selection
+import UserTypeSelect from "./pages/Login/UserTypeSelect";
+
+// Customer Authentication
+import CustomerAuth from "./pages/Login/CustomerAuth";
+import CustomerLogin from "./pages/Login/CustomerLogin";
+import CustomerSignup from "./pages/Login/CustomerSignup";
+
+// Staff Login Pages
+import StaffPortal from "./pages/Login/StaffPortal";
 import AdminLogin from "./pages/Login/AdminLogin";
 import ChefLogin from "./pages/Login/ChefLogin";
 import DeliveryLogin from "./pages/Login/DeliveryLogin";
 
-import StaffPortal from "./pages/Login/StaffPortal";
-
+// Customer Pages (protected)
 import Menu from "./pages/Menu/Menu";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
-import Orders from "./pages/Orders/Orders";
 import TrackOrder from "./pages/TrackOrder/TrackOrder";
+import Orders from "./pages/Orders/Orders";
 
 // Protected Route
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -32,20 +38,24 @@ function App() {
 
       <Routes>
 
-        {/* Home / Landing Page */}
+        {/* Landing */}
         <Route path="/" element={<Landing />} />
 
-        {/* Customer Auth */}
-        <Route path="/register" element={<CustomerRegister />} />
-        <Route path="/login" element={<CustomerLogin />} />
+        {/* Role Selection */}
+        <Route path="/select" element={<UserTypeSelect />} />
 
-        {/* Staff Portal */}
+        {/* Customer Flow */}
+        <Route path="/customer-auth" element={<CustomerAuth />} />
+        <Route path="/login" element={<CustomerLogin />} />
+        <Route path="/signup" element={<CustomerSignup />} />
+
+        {/* Staff Flow */}
         <Route path="/staff" element={<StaffPortal />} />
         <Route path="/staff/admin" element={<AdminLogin />} />
         <Route path="/staff/chef" element={<ChefLogin />} />
         <Route path="/staff/delivery" element={<DeliveryLogin />} />
 
-        {/* Customer Pages - Protected */}
+        {/* PROTECTED CUSTOMER ROUTES */}
         <Route
           path="/menu"
           element={
@@ -90,7 +100,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
       </Routes>
 
       <Footer />

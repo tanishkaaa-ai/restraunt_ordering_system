@@ -2,20 +2,17 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-export default function CustomerLogin() {
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
-
+export default function CustomerSignup() {
+  const [form, setForm] = useState({ name: "", email: "", pass: "" });
   const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const nav = useNavigate();
 
   const submit = (e) => {
     e.preventDefault();
 
-    // Fake login – you can replace with backend API
-    login({ role: "customer", email });
+    login({ role: "customer", email: form.email, name: form.name });
 
-    navigate("/menu");
+    nav("/menu");
   };
 
   return (
@@ -25,28 +22,35 @@ export default function CustomerLogin() {
         className="bg-white p-8 rounded-2xl w-96 shadow-xl space-y-5"
       >
         <h2 className="text-3xl font-bold text-center text-gray-800">
-          Customer Login
+          Customer Sign Up
         </h2>
+
+        <input
+          placeholder="Full Name"
+          className="w-full p-3 border rounded-lg"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+        />
 
         <input
           placeholder="Email"
           className="w-full p-3 border rounded-lg"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
 
         <input
           type="password"
           placeholder="Password"
           className="w-full p-3 border rounded-lg"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
-        />
+          value={form.pass}
+          onChange={(e) => setForm({ ...form, pass: e.target.value })}
+          />
 
         <button
           className="w-full py-3 rounded-lg text-white font-bold bg-gradient-to-r from-red-500 to-orange-500 hover:scale-105 transition"
         >
-          Login
+          Sign Up
         </button>
       </form>
     </div>
