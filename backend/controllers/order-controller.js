@@ -113,3 +113,13 @@ exports.updateOrderStatus = async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 };
+
+// GET all Ready orders for delivery agent
+exports.getReadyOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({ status: "Ready" });
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};

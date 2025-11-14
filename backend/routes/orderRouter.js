@@ -8,7 +8,8 @@ const {
     createOrder,
     getMyOrders,
     getAllOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    getReadyOrders
 } = require("../controllers/order-controller");
 
 // CUSTOMER: Create order
@@ -26,5 +27,6 @@ router.put("/update-status/:id",
     allowRoles(["chef", "delivery", "admin"]),
     updateOrderStatus
 );
+router.get("/ready", auth, allowRoles(["delivery","admin"]), getReadyOrders);
 
 module.exports = router;
