@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/mongoose-connect.js";
 import authRoutes from "./routes/authRouter.js";
+import auth from "./middlewares/auth-middleware.js";
 dotenv.config();
 const app = express();
 
@@ -20,6 +21,13 @@ app.use("/auth", authRoutes);
 // Server listening
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+
+
+app.get("/protected-test", auth, (req, res) => {
+    res.json({ message: "Protected route working", user: req.user });
+});
 
 
 // const express = require("express");
