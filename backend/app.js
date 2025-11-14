@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/mongoose-connect.js";
 import authRoutes from "./routes/authRouter.js";
 import auth from "./middlewares/auth-middleware.js";
+import menuRoutes from "./routes/menuRouter.js";
 dotenv.config();
 const app = express();
 
@@ -29,6 +30,8 @@ app.get("/protected-test", auth, (req, res) => {
     res.json({ message: "Protected route working", user: req.user });
 });
 
+
+app.use("/menu", menuRoutes);
 
 // const express = require("express");
 // const connectDB = require("./config/mongoose-connect");
