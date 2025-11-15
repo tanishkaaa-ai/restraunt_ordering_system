@@ -1,75 +1,65 @@
-import React from "react";
-import { useAuth } from "../../context/AuthContext";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+// import { CartContext } from "../../context/CartContext";
+import axios from "axios";
 
-const items = [
-  {
-    id: 1,
-    name: "Spicy Chicken Bowl",
-    price: 180,
-    img: "https://images.unsplash.com/photo-1606756790138-87a0c7176678",
-  },
-  {
-    id: 2,
-    name: "Veggie Delight",
-    price: 120,
-    img: "https://images.unsplash.com/photo-1512058564366-18510be2db19",
-  },
-  {
-    id: 3,
-    name: "Prawn Noodles",
-    price: 150,
-    img: "https://images.unsplash.com/photo-1546069901-eacef0df6022",
-  },
-];
-
-const Menu = () => {
-  const { role } = useAuth();
+import { API_URL } from "../../utils/api";
+export default function Menu() {
+  const [items, setItems] = useState([]);
+  const { user } = useContext(AuthContext);
+  // const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
 
-  const handleAdd = (id) => {
-    if (role !== "customer") {
+  useEffect(() => {
+    // Fetch menu
+     axios.get(`${API_URL}/menu`)
+    .then(res => setItems(res.data))
+    .catch(err => console.log(err));
+  }, []);
+
+  const handleAdd = (item) => {
+    // If not logged in → go to Login
+    if (!user) {
       navigate("/login");
       return;
     }
-    navigate("/cart");
+
+    addToCart(item);   // Add to cart context
+    alert("Item added to cart!");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 via-red-100 to-yellow-100 p-10">
-
-      <h1 className="text-4xl font-extrabold mb-10 text-gray-800 text-center">
-        Our Delicious Menu
-      </h1>
+    <div className="px-10 py-14">
+      <h1 className="text-4xl font-bold mb-8">Our Menu</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white p-6 rounded-3xl shadow-xl hover:shadow-2xl transition"
-          >
+        {items.map((food) => (
+          <div key={food._id} className="bg-white shadow-xl rounded-2xl p-6">
             <img
-              src={item.img}
-              className="w-full h-48 object-cover rounded-xl"
+              src={food.image}
+              alt={food.name}
+              className="rounded-xl w-full h-48 object-cover"
             />
 
-            <h2 className="mt-4 text-xl font-bold text-gray-800">{item.name}</h2>
-            <p className="text-gray-600 mt-2 font-semibold">₹{item.price}</p>
+            <h2 className="text-2xl font-semibold mt-4">{food.name}</h2>
+            <p className="text-gray-600 mt-2">{food.description}</p>
 
-            <button
-              onClick={() => handleAdd(item.id)}
-              className="mt-4 w-full bg-orange-600 text-white py-2 rounded-xl font-semibold hover:bg-orange-700"
-            >
-              Add to Cart
-            </button>
+            <div className="flex justify-between items-center mt-4">
+              <span className="font-bold text-orange-500 text-xl">
+                ₹{food.price}
+              </span>
+
+              <button
+                onClick={() => handleAdd(food)}
+                className="px-4 py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition"
+              >
+                Add to Cart
+              </button>
+            </div>
           </div>
         ))}
-
       </div>
-
     </div>
   );
-};
-
-export default Menu;
+}
