@@ -8,25 +8,7 @@ const Landing = () => {
     <div className="min-h-screen w-full bg-gradient-to-br from-orange-200 via-amber-200 to-red-200 p-6 flex flex-col">
 
       {/* TOP NAV */}
-      <div className="flex justify-between items-center mb-10 px-4">
-        <h1 className="text-3xl font-extrabold text-orange-700 tracking-wide">
-          FOODEAT
-        </h1>
-
-        <div className="flex gap-8 text-gray-700 text-lg font-medium">
-          <a href="/" className="hover:text-black">Home</a>
-          <a href="/menu" className="hover:text-black">Menu</a>
-          <a href="/about" className="hover:text-black">About</a>
-        </div>
-
-        {/* Profile Icon */}
-        <button
-          onClick={() => navigate("/login")}
-          className="bg-white p-3 rounded-full shadow-md hover:shadow-lg transition"
-        >
-          <span className="text-xl">👤</span>
-        </button>
-      </div>
+      
 
       {/* HERO SECTION */}
       <div className="flex flex-col lg:flex-row items-center gap-12 px-8">
@@ -47,12 +29,12 @@ const Landing = () => {
               onClick={() => navigate("/menu")}
               className="bg-orange-600 text-white px-8 py-3 rounded-full shadow-lg font-semibold hover:bg-orange-700"
             >
-              Food Menu
+              Get Started ->
             </button>
 
-            <button className="bg-white px-8 py-3 rounded-full shadow-md font-semibold hover:shadow-lg">
+            {/* <button className="bg-white px-8 py-3 rounded-full shadow-md font-semibold hover:shadow-lg">
               Book a Table
-            </button>
+            </button> */}
           </div>
         </div>
 
