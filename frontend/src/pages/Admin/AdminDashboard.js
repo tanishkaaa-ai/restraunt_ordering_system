@@ -4,12 +4,14 @@ import api from "../../utils/api";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
-    totalOrders: 0,
-    totalChefs: 0,
-    totalDelivery: 0,
-    totalCustomers: 0,
-    totalMenuItems: 0,
-  });
+  totalOrders: 0,
+  totalMenu: 0,
+  totalUsers: 0,
+  totalCustomers: 0,
+  totalChefs: 0,
+  totalDelivery: 0
+});
+
 
   useEffect(() => {
     api.get("/dashboard/admin/stats")
@@ -31,9 +33,11 @@ export default function AdminDashboard() {
       {/* STATS */}
       <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto mb-20">
         <StatCard label="Total Orders" value={stats.totalOrders} color="bg-green-400" />
-        <StatCard label="Menu Items" value={stats.totalMenuItems} color="bg-blue-400" />
+        <StatCard label="Menu Items" value={stats.totalMenu} color="bg-blue-400" />
         <StatCard label="Customers" value={stats.totalCustomers} color="bg-orange-400" />
+        <StatCard label="Chefs" value={stats.totalChefs} color="bg-purple-400" />
         <StatCard label="Delivery Agents" value={stats.totalDelivery} color="bg-pink-400" />
+
       </div>
 
       {/* MAIN MENU */}

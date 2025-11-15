@@ -23,22 +23,33 @@ exports.getAllOrders = async (req, res) => {
 };
 
 // ADMIN - GET STATS
+// ADMIN - GET STATS
 exports.getAdminStats = async (req, res) => {
     try {
         const totalUsers = await User.countDocuments();
         const totalOrders = await Order.countDocuments();
         const totalMenu = await MenuItem.countDocuments();
 
+        // Count by roles
+        const totalCustomers = await User.countDocuments({ role: "customer" });
+        const totalChefs = await User.countDocuments({ role: "chef" });
+        const totalDelivery = await User.countDocuments({ role: "delivery" });
+
         res.json({
             totalUsers,
             totalOrders,
-            totalMenu
+            totalMenu,
+            totalCustomers,
+            totalChefs,
+            totalDelivery
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Server error", error });
     }
 };
+
 
 // CHEF - ORDERS TO COOK
 exports.getChefOrders = async (req, res) => {

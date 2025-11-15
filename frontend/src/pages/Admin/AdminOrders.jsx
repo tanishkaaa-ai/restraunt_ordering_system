@@ -1,20 +1,14 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../utils/api";
 
 export default function AdminOrders() {
-  const [orders, setOrders] = useState([
-    {
-      id: 301,
-      customer: "Tanisha",
-      total: 450,
-      status: "Delivered",
-    },
-    {
-      id: 302,
-      customer: "Aarav",
-      total: 299,
-      status: "Preparing",
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    api.get("/dashboard/admin/orders")
+      .then((res) => setOrders(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-700 via-pink-600 to-orange-500 px-8 py-12 text-white">
@@ -22,18 +16,33 @@ export default function AdminOrders() {
       <h1 className="text-5xl font-extrabold text-center mb-12">📦 All Orders</h1>
 
       <div className="max-w-5xl mx-auto grid gap-10">
+        
+        {orders.length === 0 && (
+          <p className="text-center text-lg opacity-90">Loading orders...</p>
+        )}
 
         {orders.map((order) => (
           <div
-            key={order.id}
+            key={order._id}
             className="p-8 bg-white/20 rounded-3xl backdrop-blur-xl border border-white/30 shadow-xl"
           >
-            <h2 className="text-3xl font-bold mb-2">Order #{order.id}</h2>
+            <h2 className="text-3xl font-bold mb-2">
+              Order #{order._id.slice(-6)}
+            </h2>
 
-            <p className="text-xl mb-1">Customer: {order.customer}</p>
-            <p className="text-xl mb-1">Total: ₹ {order.total}</p>
+            <p className="text-xl mb-1">
+              👤 Customer: 
+              <span className="font-semibold ml-2">
+                {order.userId?.name || "Unknown"}
+              </span>
+            </p>
+
+            <p className="text-xl mb-1">
+              💰 Total: ₹ {order.totalAmount}
+            </p>
+
             <p className="text-xl mb-3">
-              Status:{" "}
+              🚦 Status:{" "}
               <span className="font-bold text-yellow-300">{order.status}</span>
             </p>
 

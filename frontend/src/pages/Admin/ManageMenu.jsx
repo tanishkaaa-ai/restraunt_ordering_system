@@ -1,50 +1,72 @@
+import React, { useEffect, useState } from "react";
+import api from "../../utils/api";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 export default function ManageMenu() {
-  const [menu, setMenu] = useState([
-    { id: 1, name: "Pizza", price: 299, category: "Italian" },
-    { id: 2, name: "Burger", price: 149, category: "Fast Food" },
-    { id: 3, name: "Biryani", price: 249, category: "Indian" }
-  ]);
+  const [menu, setMenu] = useState([]);
 
-  const deleteItem = (id) => {
-    setMenu(menu.filter((item) => item.id !== id));
+  useEffect(() => {
+    api.get("/menu")
+      .then(res => setMenu(res.data))
+      .catch(err => console.log(err));
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this menu item?")) return;
+
+    try {
+      await api.delete(`/menu/${id}`);
+      setMenu(menu.filter(item => item._id !== id));
+      alert("Item deleted!");
+    } catch (err) {
+      console.log(err);
+      alert("Failed to delete item");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-600 via-red-500 to-purple-700 px-8 py-12 text-white">
-      
-      <h1 className="text-5xl font-extrabold text-center mb-12">🍽 Manage Menu</h1>
+    <div className="min-h-screen bg-gradient-to-br from-orange-300 to-red-300 p-10">
 
-      <Link
-        to="/admin/add-item"
-        className="px-8 py-3 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:scale-105 transition"
-      >
-        ➕ Add Food Item
-      </Link>
+      <h1 className="text-4xl font-bold text-white text-center mb-10">
+        🍽 Manage Menu
+      </h1>
 
-      <div className="max-w-5xl mx-auto mt-12 grid gap-8">
+      <div className="text-center mb-8">
+        <Link
+          to="/admin/add-item"
+          className="px-6 py-3 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700"
+        >
+          ➕ Add New Item
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {menu.map((item) => (
-          <div
-            key={item.id}
-            className="p-8 bg-white/20 rounded-3xl backdrop-blur-xl shadow-xl border border-white/30"
-          >
-            <h2 className="text-3xl font-bold">{item.name}</h2>
-            <p className="text-lg">Category: {item.category}</p>
-            <p className="text-xl font-bold mt-2">₹ {item.price}</p>
+          <div key={item._id} className="bg-white rounded-xl shadow-xl p-6">
+            <img
+              src={item.image}
+              alt={item.name}
+              className="rounded-xl w-full h-40 object-cover"
+            />
 
-            <div className="flex gap-4 mt-6">
+            <h2 className="text-2xl font-semibold mt-4">{item.name}</h2>
+            <p className="text-gray-600">{item.description}</p>
+
+            <p className="text-xl font-bold text-orange-600 mt-3">
+              ₹{item.price}
+            </p>
+
+            <div className="flex justify-between mt-5">
               <Link
-                to={`/admin/edit-item/${item.id}`}
-                className="px-6 py-2 bg-yellow-400 text-gray-900 rounded-lg font-bold"
+                to={`/admin/edit/${item._id}`}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
               >
                 Edit
               </Link>
 
               <button
-                onClick={() => deleteItem(item.id)}
-                className="px-6 py-2 bg-red-500 rounded-lg font-bold hover:scale-105 transition"
+                onClick={() => handleDelete(item._id)}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
               >
                 Delete
               </button>
@@ -53,7 +75,6 @@ export default function ManageMenu() {
           </div>
         ))}
       </div>
-
     </div>
   );
 }

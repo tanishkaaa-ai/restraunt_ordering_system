@@ -36,9 +36,9 @@ import DeliveryOrders from "./pages/delivery/DeliveryOrders";
 /* ADMIN */
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageMenu from "./pages/admin/ManageMenu";
-import AddMenuItem from "./pages/admin/AddMenuItem";
 import AdminOrders from "./pages/admin/AdminOrders";
 import UsersList from "./pages/admin/UsersList";
+import MenuForm from "./pages/admin/MenuForm";
 
 function App() {
   return (
@@ -167,7 +167,15 @@ function App() {
           path="/admin/add-item"
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
-              <AddMenuItem />
+              <MenuForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/edit/:id"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <MenuForm />
             </ProtectedRoute>
           }
         />
