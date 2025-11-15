@@ -30,7 +30,6 @@ import ChefDashboard from "./pages/chef/ChefDashboard";
 import ChefOrders from "./pages/chef/ChefOrders";
 
 /* DELIVERY */
-import DeliveryDashboard from "./pages/delivery/DeliveryDashboard";
 import DeliveryOrders from "./pages/delivery/DeliveryOrders";
 
 /* ADMIN */
@@ -130,7 +129,7 @@ function App() {
           path="/delivery"
           element={
             <ProtectedRoute allowedRoles={["delivery"]}>
-              <DeliveryDashboard />
+              <DeliveryOrders />
             </ProtectedRoute>
           }
         />

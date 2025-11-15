@@ -1,93 +1,71 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../utils/api";
 
 export default function ChefOrders() {
-  // Dummy orders until backend connects
-  const [orders, setOrders] = useState([
-    {
-      id: 101,
-      status: "Received",
-      items: [
-        { name: "Margherita Pizza", qty: 1 },
-        { name: "Garlic Bread", qty: 2 },
-      ],
-    },
-    {
-      id: 102,
-      status: "Preparing",
-      items: [{ name: "Veg Burger", qty: 2 }],
-    },
-    {
-      id: 103,
-      status: "Received",
-      items: [{ name: "Chicken Biryani", qty: 1 }],
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
 
-  // Update order status
-  const updateStatus = (id, newStatus) => {
-    setOrders(
-      orders.map((order) =>
-        order.id === id ? { ...order, status: newStatus } : order
-      )
-    );
+  useEffect(() => {
+    api.get("/dashboard/chef/orders")
+      .then(res => setOrders(res.data))
+      .catch(err => console.log(err));
+  }, []);
+
+  const updateStatus = async (id, status) => {
+    try {
+      await api.put(`/order/update-status/${id}`, { status });
+      alert("Status updated!");
+
+      setOrders(orders.map(o => 
+        o._id === id ? { ...o, status } : o
+      ));
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-500 via-red-500 to-purple-700 px-8 py-12 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-red-500 via-orange-400 to-yellow-300 p-8 text-white">
 
-      <h1 className="text-5xl font-extrabold text-center mb-12 drop-shadow-md">
-        🍽 Kitchen Orders
-      </h1>
+      <h1 className="text-5xl font-extrabold text-center mb-12">👨‍🍳 Chef Orders</h1>
 
-      <div className="max-w-5xl mx-auto grid gap-10">
+      <div className="max-w-5xl mx-auto grid gap-8">
 
-        {orders.map((order) => (
-          <div
-            key={order.id}
-            className="p-8 bg-white/20 shadow-xl backdrop-blur-xl border border-white/30 rounded-3xl"
-          >
-            <h2 className="text-3xl font-bold mb-4">Order #{order.id}</h2>
+        {orders.map(order => (
+          <div key={order._id} className="p-8 bg-white/20 rounded-3xl shadow-xl backdrop-blur-xl">
 
-            <p className="text-xl mb-6">
-              Status:{" "}
-              <span className="font-bold text-yellow-300">{order.status}</span>
-            </p>
+            <h2 className="text-3xl font-bold mb-2">
+              Order #{order._id.slice(-6)}
+            </h2>
 
-            <h3 className="text-2xl mb-2 font-semibold">Items:</h3>
+            <p className="text-lg">Customer: {order.userId?.name}</p>
+            <p className="text-lg mb-4">Status: {order.status}</p>
 
-            <ul className="mb-6 pl-6 list-disc text-lg">
-              {order.items.map((item, i) => (
-                <li key={i}>
-                  {item.name} × {item.qty}
-                </li>
+            <h3 className="text-xl font-semibold mt-4">Items:</h3>
+            <ul className="list-disc ml-6 text-lg">
+              {order.items.map((it, i) => (
+                <li key={i}>{it.name} × {it.quantity}</li>
               ))}
             </ul>
 
-            {/* Status Buttons */}
-            <div className="flex gap-4">
+            <div className="mt-6 flex gap-4">
+              <button
+                onClick={() => updateStatus(order._id, "Preparing")}
+                className="px-5 py-2 bg-blue-500 rounded-xl"
+              >
+                Preparing
+              </button>
 
-              {order.status === "Received" && (
-                <button
-                  onClick={() => updateStatus(order.id, "Preparing")}
-                  className="px-6 py-3 bg-yellow-400 text-gray-900 rounded-xl font-bold hover:scale-105 transition"
-                >
-                  Mark Preparing
-                </button>
-              )}
-
-              {order.status === "Preparing" && (
-                <button
-                  onClick={() => updateStatus(order.id, "Ready")}
-                  className="px-6 py-3 bg-green-400 text-gray-900 rounded-xl font-bold hover:scale-105 transition"
-                >
-                  Mark Ready
-                </button>
-              )}
-
+              <button
+                onClick={() => updateStatus(order._id, "Ready")}
+                className="px-5 py-2 bg-green-500 rounded-xl"
+              >
+                Ready ✔
+              </button>
             </div>
+
           </div>
         ))}
-
       </div>
     </div>
   );
