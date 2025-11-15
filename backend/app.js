@@ -9,6 +9,8 @@ import orderRoutes from "./routes/orderRouter.js";
 import dashboardRoutes from "./routes/dashboardRouter.js";
 dotenv.config();
 const app = express();
+const cartRoutes = require("./routes/cartRouter");
+app.use("/cart", cartRoutes);
 app.use(cors());
 //middlewares 
 app.use(express.json());
