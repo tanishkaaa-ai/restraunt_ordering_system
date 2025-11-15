@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../utils/api";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -10,11 +12,17 @@ const Signup = () => {
     role: "customer",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Account Created!");
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    await axios.post(`${API_URL}/auth/register`, form);
+    alert("Account created!");
     navigate("/login");
-  };
+  } catch (err) {
+    alert("Signup failed");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200 flex items-center justify-center">
