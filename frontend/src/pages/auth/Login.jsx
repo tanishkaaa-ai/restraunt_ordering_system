@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
+import axios from "axios";
+import { API_URL } from "../../utils/api";
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -12,15 +13,29 @@ const Login = () => {
     role: "customer",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    login("fake-token", form.role);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  try {
+    const response = await axios.post(`${API_URL}/auth/login`, {
+      email: form.email,
+      password: form.password,
+      role: form.role,
+    });
+
+    const token = response.data.token;
+
+    login(token, form.role);  // store token + role
     if (form.role === "customer") navigate("/menu");
     if (form.role === "chef") navigate("/chef");
     if (form.role === "delivery") navigate("/delivery");
     if (form.role === "admin") navigate("/admin");
-  };
+  } catch (err) {
+    console.log(err);
+    
+    alert("Invalid login");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-200 via-yellow-200 to-amber-200 flex items-center justify-center">

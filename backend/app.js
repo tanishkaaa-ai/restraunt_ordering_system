@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectDB from "./config/mongoose-connect.js";
 import authRoutes from "./routes/authRouter.js";
 import auth from "./middlewares/auth-middleware.js";
@@ -8,7 +9,7 @@ import orderRoutes from "./routes/orderRouter.js";
 import dashboardRoutes from "./routes/dashboardRouter.js";
 dotenv.config();
 const app = express();
-
+app.use(cors());
 //middlewares 
 app.use(express.json());
 
