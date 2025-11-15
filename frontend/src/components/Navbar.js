@@ -1,9 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useState, useRef } from "react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+const dropdownRef = useRef();
 
   return (
     <header className="bg-white/90 backdrop-blur-sm border-b sticky top-0 z-30">
@@ -24,21 +27,13 @@ export default function Navbar() {
               <Link to="/menu" className="hover:text-accent">Menu</Link>
               <Link to="/about" className="hover:text-accent">About</Link>
               <Link to="/contact" className="hover:text-accent">Contact</Link>
-
-              {/* SHOW LOGOUT ONLY IF USER LOGGED IN */}
-              {user && (
-                <button onClick={logout} className="text-red-500 font-semibold">
-                  Logout
-                </button>
-              )}
             </nav>
           </div>
 
           {/* RIGHT SIDE BUTTONS */}
-          {/* RIGHT SIDE BUTTONS */}
           <div className="flex items-center gap-4">
 
-            {/* If NOT logged in → show Login & Signup */}
+            {/* If NOT logged in → Login + Signup */}
             {!user && (
               <>
                 <Link
@@ -57,8 +52,8 @@ export default function Navbar() {
               </>
             )}
 
-            {/* If logged in → show Track Order */}
-            {user && user.role==="customer" &&(
+            {/* If logged in → TRACK ORDER only for customer */}
+            {user && user.role === "customer" && (
               <Link
                 to="/track"
                 className="text-sm text-gray-600 hover:text-accent"
@@ -67,7 +62,7 @@ export default function Navbar() {
               </Link>
             )}
 
-            {/* SHOW CART ONLY FOR CUSTOMERS */}
+            {/* ONLY CUSTOMERS SEE CART */}
             {user && user.role === "customer" && (
               <Link
                 to="/cart"
@@ -76,6 +71,58 @@ export default function Navbar() {
                 Cart
               </Link>
             )}
+
+            {/* PROFILE DROPDOWN FOR ALL LOGGED-IN USERS */}
+            {/* PROFILE DROPDOWN FOR ALL LOGGED-IN USERS */}
+            {user && (
+              <div className="relative" ref={dropdownRef}>
+
+                {/* Profile Icon (CLICK) */}
+                <button
+                  onClick={() => setOpen(!open)}
+                  className="flex items-center gap-2"
+                >
+                  <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center font-bold">
+                    {user?.user?.name?.charAt(0).toUpperCase() ||
+                      user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                </button>
+
+                {/* DROPDOWN MENU */}
+                {open && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white shadow-lg rounded-xl p-4 text-gray-800 z-50">
+                    <p className="font-semibold">{user.user?.name || user.name}</p>
+                    <p className="text-sm text-gray-500">{user.user?.email || user.email}</p>
+
+                    <p className="text-sm mt-1">
+                      Role: <span className="font-bold">{user.role.toUpperCase()}</span>
+                    </p>
+
+                    <hr className="my-3" />
+
+                    <Link
+                      to="/profile"
+                      className="block text-sm py-1 hover:text-accent"
+                      onClick={() => setOpen(false)}
+                    >
+                      View Profile
+                    </Link>
+
+                    <button
+                      onClick={() => {
+                        logout();
+                        setOpen(false);
+                      }}
+                      className="text-red-500 text-sm mt-2 w-full text-left"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+
           </div>
 
         </div>

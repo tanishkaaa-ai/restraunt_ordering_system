@@ -10,7 +10,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 /* COMMON PAGES */
 import Landing from "./pages/common/Landing";
-import Home from "./pages/common/Home";
+import Profile from "./pages/common/Profile";
 
 /* AUTH PAGES */
 import SelectRole from "./pages/auth/SelectRole";
@@ -50,7 +50,6 @@ function App() {
 
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<Landing />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/choose-role" element={<SelectRole />} />
 
         <Route path="/login" element={<Login />} />
@@ -195,6 +194,14 @@ function App() {
               <UsersList />
             </ProtectedRoute>
           }
+        />
+        <Route
+           path="/profile"
+           element={
+              <ProtectedRoute allowedRoles={["customer","admin","chef","delivery"]}>
+                <Profile />
+              </ProtectedRoute>
+            }
         />
 
       </Routes>
