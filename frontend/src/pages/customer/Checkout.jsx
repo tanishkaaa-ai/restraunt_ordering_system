@@ -1,36 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 
-const Checkout = () => {
+export default function Checkout() {
   const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    api.get("/cart")
+      .then(res => {
+        setCartItems(res.data.items);
+        setTotal(
+          res.data.items.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          )
+        );
+      });
+  }, []);
 
   const handleOrder = () => {
-    localStorage.removeItem("cart");
-    alert("Order placed successfully!");
-    navigate("/orders");
+    api.post("/order/create", {
+      items: cartItems.map(item => ({
+        itemId: item.itemId,
+        quantity: item.quantity
+      }))
+    })
+      .then(() => {
+        alert("Order placed!");
+        navigate("/orders");
+      })
+      .catch(err => console.log(err));
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-200 p-8 flex justify-center">
-      
-      <div className="bg-white shadow-xl rounded-xl p-8 max-w-lg w-full">
-
-        <h1 className="text-3xl font-bold mb-6 text-center">Checkout</h1>
-
-        <p className="text-gray-600 mb-4">
-          Confirm your order details and proceed.
-        </p>
-
-        <button
-          onClick={handleOrder}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg text-lg"
-        >
-          Place Order ✔️
-        </button>
-
-      </div>
+    <div className="min-h-screen p-10">
+      <h1 className="text-3xl">Checkout</h1>
+      <button onClick={handleOrder} className="bg-green-500 p-3 mt-5 text-white">
+        Place Order
+      </button>
     </div>
   );
-};
-
-export default Checkout;
+}

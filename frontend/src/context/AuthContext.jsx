@@ -1,24 +1,24 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [role, setRole] = useState(localStorage.getItem("role") || null);
+  // Load from session storage instead of localStorage
+  const [token, setToken] = useState(sessionStorage.getItem("token") || null);
+  const [role, setRole] = useState(sessionStorage.getItem("role") || null);
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
+    JSON.parse(sessionStorage.getItem("user")) || null
   );
 
-  // LOGIN FUNCTION (TOKEN + ROLE + USER OBJECT)
+  // LOGIN FUNCTION
   const login = (token, role, userData) => {
     setToken(token);
     setRole(role);
     setUser(userData);
 
-    localStorage.setItem("token", token);
-    localStorage.setItem("role", role);
-    localStorage.setItem("user", JSON.stringify(userData));
+    sessionStorage.setItem("token", token);
+    sessionStorage.setItem("role", role);
+    sessionStorage.setItem("user", JSON.stringify(userData));
   };
 
   // LOGOUT FUNCTION
@@ -27,9 +27,9 @@ export const AuthProvider = ({ children }) => {
     setRole(null);
     setUser(null);
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("user");
   };
 
   return (

@@ -1,25 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import api from "../../utils/api";
 
-const TrackOrder = () => {
+export default function TrackOrder() {
+  const { search } = useLocation();
+  const orderId = new URLSearchParams(search).get("orderId");
+
+  const [order, setOrder] = useState(null);
+
+  useEffect(() => {
+    api.get("/order/myorders")
+      .then(res => {
+        const findOrder = res.data.find(o => o._id === orderId);
+        setOrder(findOrder);
+      })
+      .catch(err => console.log(err));
+  }, [orderId]);
+
+  if (!order) return <p>Loading...</p>;
+
+  const steps = [
+    "Received",
+    "Preparing",
+    "Ready",
+    "Out for Delivery",
+    "Delivered"
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-100 to-blue-200 p-8 flex justify-center">
+    <div className="p-10">
+      <h1 className="text-3xl">Track Order</h1>
 
-      <div className="bg-white p-10 shadow-xl rounded-xl max-w-lg w-full text-center">
-
-        <h1 className="text-3xl font-bold mb-6">Order Tracking 🚚</h1>
-
-        <div className="space-y-4 text-gray-700 text-lg">
-          <p>Order Confirmed ✔️</p>
-          <p>Preparing Food 🍳</p>
-          <p>Ready for Delivery 🧺</p>
-          <p>Out for Delivery 🚴‍♂️</p>
-          <p>Delivered ✅</p>
+      {steps.map(step => (
+        <div key={step} className="flex items-center gap-3 my-3">
+          <div className={`w-4 h-4 rounded-full 
+            ${step === order.status ? "bg-green-500" : "bg-gray-300"}`}></div>
+          <span className={step === order.status ? "font-bold" : ""}>{step}</span>
         </div>
-
-      </div>
-
+      ))}
     </div>
   );
-};
-
-export default TrackOrder;
+}
