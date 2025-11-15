@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-
+import { useAuth } from "../context/AuthContext";
 export default function Navbar(){
+  const { logout } = useAuth();
   const navigate = useNavigate();
   return (
     <header className="bg-white/90 backdrop-blur-sm border-b sticky top-0 z-30">
@@ -12,6 +13,15 @@ export default function Navbar(){
               <Link to="/menu" className="hover:text-accent">Menu</Link>
               <Link to="/about" className="hover:text-accent">About</Link>
               <Link to="/contact" className="hover:text-accent">Contact</Link>
+              <button
+  onClick={() => {
+    logout();
+    navigate("/login");
+  }}
+  className="text-red-500 font-semibold hover:text-red-600 cursor-pointer"
+>
+  Logout
+</button>
             </nav>
           </div>
           <div className="flex items-center gap-4">

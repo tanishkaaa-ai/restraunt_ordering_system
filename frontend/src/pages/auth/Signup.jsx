@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../../utils/api";
+import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
+
 
 const Signup = () => {
   const navigate = useNavigate();
+  
+const { login } = useAuth();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,9 +20,13 @@ const Signup = () => {
   e.preventDefault();
 
   try {
-    await axios.post(`${API_URL}/auth/register`, form);
-    alert("Account created!");
-    navigate("/login");
+    const res = await api.post("/auth/register", form);
+
+    const { token, user } = res.data;
+
+    login(token, user.role, user);
+
+    navigate("/menu");
   } catch (err) {
     alert("Signup failed");
   }

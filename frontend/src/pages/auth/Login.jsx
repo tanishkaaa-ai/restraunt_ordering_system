@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
-import { API_URL } from "../../utils/api";
+import api from "../../utils/api";
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -17,25 +17,23 @@ const Login = () => {
   e.preventDefault();
 
   try {
-    const response = await axios.post(`${API_URL}/auth/login`, {
-      email: form.email,
-      password: form.password,
-      role: form.role,
-    });
+    const res = await api.post("/auth/login", form);
 
-    const token = response.data.token;
+    const { token, user } = res.data;
 
-    login(token, form.role);  // store token + role
-    if (form.role === "customer") navigate("/menu");
-    if (form.role === "chef") navigate("/chef");
-    if (form.role === "delivery") navigate("/delivery");
-    if (form.role === "admin") navigate("/admin");
+    // Save to AuthContext
+    login(token, user.role, user);
+
+    // Redirect based on role
+    if (user.role === "customer") navigate("/menu");
+    if (user.role === "admin") navigate("/admin");
+    if (user.role === "chef") navigate("/chef");
+    if (user.role === "delivery") navigate("/delivery");
   } catch (err) {
-    console.log(err);
-    
-    alert("Invalid login");
+    alert("Login failed");
   }
 };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-200 via-yellow-200 to-amber-200 flex items-center justify-center">

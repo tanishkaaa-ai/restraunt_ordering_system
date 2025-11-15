@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 // import { CartContext } from "../../context/CartContext";
 import axios from "axios";
 
-import { API_URL } from "../../utils/api";
+import api from "../../utils/api";
 export default function Menu() {
   const [items, setItems] = useState([]);
   const { user } = useContext(AuthContext);
@@ -12,24 +12,31 @@ export default function Menu() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch menu
-     axios.get(`${API_URL}/menu`)
-    .then(res => setItems(res.data))
-    .catch(err => console.log(err));
+    api.get("/menu")
+      .then(res => setItems(res.data))
+      .catch(err => console.log(err));
   }, []);
 
-  const handleAdd = (item) => {
-    // If not logged in → go to Login
+  const handleAdd = async (item) => {
     if (!user) {
       navigate("/login");
       return;
     }
 
-    addToCart(item);   // Add to cart context
-    alert("Item added to cart!");
+    try {
+      await api.post("/cart/add", {
+        itemId: item._id,
+        quantity: 1,
+      });
+
+      alert("Item added to cart!");
+    } catch (err) {
+      console.log(err);
+      alert("Failed to add item");
+    }
   };
 
-  return (
+   return (
     <div className="px-10 py-14">
       <h1 className="text-4xl font-bold mb-8">Our Menu</h1>
 
