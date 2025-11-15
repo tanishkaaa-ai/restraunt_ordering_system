@@ -1,68 +1,79 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";  // NO Router here
 
-// Components
+/* COMPONENTS */
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-
-// Landing & Role Pages
-import Landing from "./pages/Home/Landing";
-import UserTypeSelect from "./pages/Login/UserTypeSelect";
-
-// Customer Auth
-import CustomerAuth from "./pages/Login/CustomerAuth";
-import CustomerLogin from "./pages/Login/CustomerLogin";
-import CustomerSignup from "./pages/Login/CustomerSignup";
-
-// Staff Auth
-import StaffPortal from "./pages/Login/StaffPortal";
-import StaffAuth from "./pages/Login/StaffAuth";
-import AdminLogin from "./pages/Login/AdminLogin";
-import ChefLogin from "./pages/Login/ChefLogin";
-import DeliveryLogin from "./pages/Login/DeliveryLogin";
-
-// Customer Pages
-import Menu from "./pages/Menu/Menu";
-import Cart from "./pages/Cart/Cart";
-import Checkout from "./pages/Checkout/Checkout";
-import TrackOrder from "./pages/TrackOrder/TrackOrder";
-import Orders from "./pages/Orders/Orders";
-
-// Protected Route
 import ProtectedRoute from "./components/ProtectedRoute";
+
+/* COMMON CONTEXT */
+import { AuthProvider } from "./context/AuthContext";
+
+/* COMMON PAGES */
+import Landing from "./pages/common/Landing";
+import Home from "./pages/common/Home";
+
+/* AUTH PAGES */
+import SelectRole from "./pages/auth/SelectRole";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+
+/* CUSTOMER */
+import CustomerAccess from "./pages/customer/CustomerAccess";
+import Menu from "./pages/customer/Menu";
+import Cart from "./pages/customer/Cart";
+import Checkout from "./pages/customer/Checkout";
+import Orders from "./pages/customer/Orders";
+import TrackOrder from "./pages/customer/TrackOrder";
+
+/* CHEF */
+import ChefDashboard from "./pages/chef/ChefDashboard";
+import ChefOrders from "./pages/chef/ChefOrders";
+
+/* DELIVERY */
+import DeliveryDashboard from "./pages/delivery/DeliveryDashboard";
+import DeliveryOrders from "./pages/delivery/DeliveryOrders";
+
+/* ADMIN */
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ManageMenu from "./pages/admin/ManageMenu";
+import AddMenuItem from "./pages/admin/AddMenuItem";
+import AdminOrders from "./pages/admin/AdminOrders";
+import UsersList from "./pages/admin/UsersList";
 
 function App() {
   return (
-    <>
+    <AuthProvider>
+
+      {/* Navbar is always visible */}
       <Navbar />
 
       <Routes>
-        {/* Landing */}
+
+        {/* PUBLIC ROUTES */}
         <Route path="/" element={<Landing />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/choose-role" element={<SelectRole />} />
 
-        {/* Choose Customer or Staff */}
-        <Route path="/select" element={<UserTypeSelect />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
-        {/* Customer Authentication */}
-        <Route path="/customer-auth" element={<CustomerAuth />} />
-        <Route path="/login" element={<CustomerLogin />} />
-        <Route path="/signup" element={<CustomerSignup />} />
-
-        {/* Staff Authentication */}
-        <Route path="/staff" element={<StaffPortal />} />
-        <Route path="/staff/auth" element={<StaffAuth />} />
-        <Route path="/staff/admin" element={<AdminLogin />} />
-        <Route path="/staff/chef" element={<ChefLogin />} />
-        <Route path="/staff/delivery" element={<DeliveryLogin />} />
-
-        {/* PUBLIC MENU PAGE (not protected) */}
+        {/* Public menu (view only) */}
         <Route path="/menu" element={<Menu />} />
 
-        {/* PROTECTED CUSTOMER ROUTES */}
+        {/* CUSTOMER ROUTES */}
+        <Route
+          path="/customer"
+          element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <CustomerAccess />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/cart"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["customer"]}>
               <Cart />
             </ProtectedRoute>
           }
@@ -71,7 +82,7 @@ function App() {
         <Route
           path="/checkout"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["customer"]}>
               <Checkout />
             </ProtectedRoute>
           }
@@ -80,7 +91,7 @@ function App() {
         <Route
           path="/orders"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["customer"]}>
               <Orders />
             </ProtectedRoute>
           }
@@ -89,15 +100,98 @@ function App() {
         <Route
           path="/track"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["customer"]}>
               <TrackOrder />
             </ProtectedRoute>
           }
         />
-      </Routes>
 
-      <Footer />
-    </>
+        {/* CHEF ROUTES */}
+        <Route
+          path="/chef"
+          element={
+            <ProtectedRoute allowedRoles={["chef"]}>
+              <ChefDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/chef/orders"
+          element={
+            <ProtectedRoute allowedRoles={["chef"]}>
+              <ChefOrders />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* DELIVERY ROUTES */}
+        <Route
+          path="/delivery"
+          element={
+            <ProtectedRoute allowedRoles={["delivery"]}>
+              <DeliveryDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/delivery/orders"
+          element={
+            <ProtectedRoute allowedRoles={["delivery"]}>
+              <DeliveryOrders />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ADMIN ROUTES */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/menu"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <ManageMenu />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/add-item"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AddMenuItem />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminOrders />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <UsersList />
+            </ProtectedRoute>
+          }
+        />
+
+      </Routes>
+    </AuthProvider>
   );
 }
 
