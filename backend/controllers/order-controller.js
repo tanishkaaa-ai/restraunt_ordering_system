@@ -123,3 +123,73 @@ exports.getReadyOrders = async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 };
+exports.acceptOrder = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const userId = req.user.id; // delivery agent ID
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Assign only if not already taken
+    if (order.deliveryAgentId && order.deliveryAgentId.toString() !== userId) {
+      return res.status(403).json({ message: "Order already assigned" });
+    }
+
+    order.deliveryAgentId = userId;
+    order.status = "Out for Delivery"; // update status
+    await order.save();
+
+    res.json({ message: "Order accepted", order });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.getDeliveryOrders = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const orders = await Order.find({
+      $or: [
+        { status: "Ready", deliveryAgentId: null },         // free orders
+        { deliveryAgentId: userId }                         // only their orders
+      ]
+    }).populate("userId");
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const userId = req.user.id;
+
+    const order = await Order.findById(id);
+
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    // Delivery agent rules
+    if (status === "Delivered") {
+      if (!order.deliveryAgentId || order.deliveryAgentId.toString() !== userId) {
+        return res.status(403).json({ message: "You can't update this order" });
+      }
+    }
+
+    order.status = status;
+    await order.save();
+
+    res.json({ message: "Order status updated", order });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};

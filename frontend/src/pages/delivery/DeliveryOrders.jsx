@@ -1,64 +1,97 @@
 import React, { useEffect, useState } from "react";
 import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 export default function DeliveryOrders() {
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    api.get("/dashboard/delivery/orders")
-      .then(res => setOrders(res.data))
-      .catch(err => console.log(err));
+    loadOrders();
   }, []);
 
-  const updateStatus = async (id, status) => {
-    try {
-      await api.put(`/order/update-status/${id}`, { status });
-      alert("Status updated!");
+  const loadOrders = () => {
+    api
+      .get("/dashboard/delivery/orders") // your existing backend route
+      .then((res) => setOrders(res.data))
+      .catch((err) => console.log(err));
+  };
 
-      setOrders(orders.map(o =>
-        o._id === id ? { ...o, status } : o
-      ));
+  // 1️⃣ Accept order (assign delivery agent)
+  const handleAccept = (orderId) => {
+    api
+      .put(`/order/update-status/${orderId}`, {
+        status: "Out for Delivery",
+        deliveryAgentId: user.id,
+      })
+      .then(() => loadOrders())
+      .catch((err) => console.log(err));
+  };
 
-    } catch (err) {
-      console.log(err);
-    }
+  // 2️⃣ Mark Delivered (only if assigned to THIS agent)
+  const markDelivered = (orderId) => {
+    api
+      .put(`/order/update-status/${orderId}`, {
+        status: "Delivered",
+      })
+      .then(() => loadOrders())
+      .catch((err) => console.log(err));
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-500 to-pink-400 p-8 text-white">
+    <div className="min-h-screen bg-blue-50 p-8">
+      <h1 className="text-4xl font-bold mb-6">Delivery Orders</h1>
 
-      <h1 className="text-5xl font-extrabold text-center mb-12">🛵 Delivery Orders</h1>
+      <div className="grid gap-6">
+        {orders.map((order) => {
+          const isAssignedToMe = order.deliveryAgentId === user.id;
 
-      <div className="max-w-5xl mx-auto grid gap-8">
+          return (
+            <div
+              key={order._id}
+              className="bg-white p-6 rounded-xl shadow-md border"
+            >
+              <h2 className="text-xl font-bold">
+                Order #{order._id.slice(-6)}
+              </h2>
 
-        {orders.map(order => (
-          <div key={order._id} className="p-8 bg-white/20 rounded-3xl shadow-xl backdrop-blur-xl">
+              <p className="text-gray-600 mt-2">
+                <b>Status:</b> {order.status}
+              </p>
 
-            <h2 className="text-3xl font-bold mb-2">
-              Order #{order._id.slice(-6)}
-            </h2>
+              {/* 1️⃣ Not Assigned → show ACCEPT button */}
+              {!order.deliveryAgentId && (
+                <button
+                  onClick={() => handleAccept(order._id)}
+                  className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg"
+                >
+                  ACCEPT ORDER
+                </button>
+              )}
 
-            <p className="text-lg mb-1">Customer: {order.userId?.name}</p>
-            <p className="text-lg mb-4">Status: {order.status}</p>
+              {/* 2️⃣ Assigned to me → show Deliver buttons */}
+              {order.deliveryAgentId && isAssignedToMe && (
+                <div className="mt-4 flex gap-3">
+                  {order.status === "Out for Delivery" && (
+                    <button
+                      onClick={() => markDelivered(order._id)}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                    >
+                      MARK DELIVERED
+                    </button>
+                  )}
+                </div>
+              )}
 
-            <div className="flex gap-4">
-              <button
-                onClick={() => updateStatus(order._id, "Out for Delivery")}
-                className="px-5 py-2 bg-yellow-400 text-black rounded-xl"
-              >
-                Out for Delivery
-              </button>
-
-              <button
-                onClick={() => updateStatus(order._id, "Delivered")}
-                className="px-5 py-2 bg-green-500 rounded-xl"
-              >
-                Delivered ✔
-              </button>
+              {/* ❌ Assigned to someone else → no buttons */}
+              {order.deliveryAgentId && !isAssignedToMe && (
+                <p className="text-red-500 mt-3 text-sm">
+                  Assigned to another delivery agent
+                </p>
+              )}
             </div>
-
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

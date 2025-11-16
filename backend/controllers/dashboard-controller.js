@@ -67,15 +67,19 @@ exports.getChefOrders = async (req, res) => {
 // DELIVERY AGENT - ORDERS TO DELIVER
 exports.getDeliveryOrders = async (req, res) => {
     try {
+        const userId = req.user.id;   // delivery agent ID
+
         const orders = await Order.find({
-            status: { $in: ["Ready", "Out for Delivery"] }
+            deliveryAgentId: userId   // only see assigned orders
         }).populate("userId");
 
         res.json(orders);
+
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
 };
+
 
 // CUSTOMER - GET THEIR OWN ORDERS
 exports.getCustomerOrders = async (req, res) => {

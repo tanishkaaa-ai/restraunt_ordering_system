@@ -3,6 +3,7 @@ const router = express.Router();
 
 const auth = require("../middlewares/auth-middleware");
 const allowRoles = require("../middlewares/role-middleware");
+const { acceptOrder } = require("../controllers/order-controller")
 
 const {
     createOrder,
@@ -28,5 +29,9 @@ router.put("/update-status/:id",
     updateOrderStatus
 );
 router.get("/ready", auth, allowRoles(["delivery","admin"]), getReadyOrders);
-
+router.post("/accept/:id",
+    auth,
+    allowRoles(["delivery"]),
+    acceptOrder
+);
 module.exports = router;
