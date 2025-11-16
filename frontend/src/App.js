@@ -33,11 +33,11 @@ import ChefOrders from "./pages/chef/ChefOrders";
 import DeliveryOrders from "./pages/delivery/DeliveryOrders";
 
 /* ADMIN */
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import ManageMenu from "./pages/admin/ManageMenu";
-import AdminOrders from "./pages/admin/AdminOrders";
-import UsersList from "./pages/admin/UsersList";
-import MenuForm from "./pages/admin/MenuForm";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import ManageMenu from "./pages/Admin/ManageMenu";
+import AdminOrders from "./pages/Admin/AdminOrders";
+import UsersList from "./pages/Admin/UsersList";
+import MenuForm from "./pages/Admin/MenuForm";
 
 function App() {
   return (
