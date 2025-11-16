@@ -4,24 +4,23 @@ import api from "../../utils/api";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
-  totalOrders: 0,
-  totalMenu: 0,
-  totalUsers: 0,
-  totalCustomers: 0,
-  totalChefs: 0,
-  totalDelivery: 0
-});
-
+    totalOrders: 0,
+    totalMenu: 0,
+    totalUsers: 0,
+    totalCustomers: 0,
+    totalChefs: 0,
+    totalDelivery: 0,
+  });
 
   useEffect(() => {
-    api.get("/dashboard/admin/stats")
-      .then(res => setStats(res.data))
-      .catch(err => console.log(err));
+    api
+      .get("/dashboard/admin/stats")
+      .then((res) => setStats(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 text-white px-8 py-16">
-
       <h1 className="text-5xl font-extrabold text-center mb-14 drop-shadow-lg tracking-wide">
         🧑‍💼 Admin Control Panel
       </h1>
@@ -37,12 +36,10 @@ export default function AdminDashboard() {
         <StatCard label="Customers" value={stats.totalCustomers} color="bg-orange-400" />
         <StatCard label="Chefs" value={stats.totalChefs} color="bg-purple-400" />
         <StatCard label="Delivery Agents" value={stats.totalDelivery} color="bg-pink-400" />
-
       </div>
 
       {/* MAIN MENU */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
-
         <AdminBox
           title="🍽 Manage Menu"
           text="Add, edit, or delete food items."
@@ -60,7 +57,6 @@ export default function AdminDashboard() {
           text="Admins, chefs, delivery & customers."
           link="/admin/users"
         />
-
       </div>
 
       <div className="mt-20 text-center text-white/80">

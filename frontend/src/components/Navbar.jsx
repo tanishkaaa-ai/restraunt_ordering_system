@@ -1,12 +1,12 @@
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useState, useRef } from "react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-const dropdownRef = useRef();
+  const dropdownRef = useRef();
 
   return (
     <header className="bg-white/90 backdrop-blur-sm border-b sticky top-0 z-30">
@@ -33,7 +33,7 @@ const dropdownRef = useRef();
           {/* RIGHT SIDE BUTTONS */}
           <div className="flex items-center gap-4">
 
-            {/* If NOT logged in → Login + Signup */}
+            {/* NOT LOGGED IN → Login + Signup */}
             {!user && (
               <>
                 <Link
@@ -52,7 +52,7 @@ const dropdownRef = useRef();
               </>
             )}
 
-            {/* If logged in → TRACK ORDER only for customer */}
+            {/* LOGGED IN → TRACK ORDER (only customers) */}
             {user && user.role === "customer" && (
               <Link
                 to="/track"
@@ -62,7 +62,7 @@ const dropdownRef = useRef();
               </Link>
             )}
 
-            {/* ONLY CUSTOMERS SEE CART */}
+            {/* CUSTOMER → CART */}
             {user && user.role === "customer" && (
               <Link
                 to="/cart"
@@ -72,12 +72,11 @@ const dropdownRef = useRef();
               </Link>
             )}
 
-            {/* PROFILE DROPDOWN FOR ALL LOGGED-IN USERS */}
-            {/* PROFILE DROPDOWN FOR ALL LOGGED-IN USERS */}
+            {/* PROFILE DROPDOWN */}
             {user && (
               <div className="relative" ref={dropdownRef}>
 
-                {/* Profile Icon (CLICK) */}
+                {/* Profile Icon */}
                 <button
                   onClick={() => setOpen(!open)}
                   className="flex items-center gap-2"
@@ -91,8 +90,12 @@ const dropdownRef = useRef();
                 {/* DROPDOWN MENU */}
                 {open && (
                   <div className="absolute right-0 mt-2 w-56 bg-white shadow-lg rounded-xl p-4 text-gray-800 z-50">
-                    <p className="font-semibold">{user.user?.name || user.name}</p>
-                    <p className="text-sm text-gray-500">{user.user?.email || user.email}</p>
+                    <p className="font-semibold">
+                      {user.user?.name || user.name}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {user.user?.email || user.email}
+                    </p>
 
                     <p className="text-sm mt-1">
                       Role: <span className="font-bold">{user.role.toUpperCase()}</span>
@@ -121,7 +124,6 @@ const dropdownRef = useRef();
                 )}
               </div>
             )}
-
 
           </div>
 
