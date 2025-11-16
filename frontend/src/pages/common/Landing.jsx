@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [topItems, setTopItems] = useState([]);
+
+  // FETCH TOP 3 MENU ITEMS
+  useEffect(() => {
+    api.get("/menu")
+      .then(res => {
+        // take first 3 items
+        setTopItems(res.data.slice(0, 3));
+      })
+      .catch(err => console.log(err));
+  }, []);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-orange-200 via-amber-200 to-red-200 p-6 flex flex-col">
-
-      {/* TOP NAV */}
-      
 
       {/* HERO SECTION */}
       <div className="flex flex-col lg:flex-row items-center gap-12 px-8">
@@ -20,7 +29,7 @@ const Landing = () => {
           </h2>
 
           <p className="text-gray-700 mb-6 text-lg">
-            Enjoy freshly prepared food with fast delivery.  
+            Enjoy freshly prepared food with fast delivery.
             Quality you can trust. Taste you’ll love.
           </p>
 
@@ -29,12 +38,8 @@ const Landing = () => {
               onClick={() => navigate("/menu")}
               className="bg-orange-600 text-white px-8 py-3 rounded-full shadow-lg font-semibold hover:bg-orange-700"
             >
-              Get Started ->
+              Get Started →
             </button>
-
-            {/* <button className="bg-white px-8 py-3 rounded-full shadow-md font-semibold hover:shadow-lg">
-              Book a Table
-            </button> */}
           </div>
         </div>
 
@@ -48,7 +53,7 @@ const Landing = () => {
         </div>
       </div>
 
-      {/* TOP LIST MENU */}
+      {/* TOP LIST SECTION */}
       <div className="mt-20 px-8">
         <h3 className="text-4xl font-semibold text-gray-800 mb-4">
           Top List
@@ -57,51 +62,47 @@ const Landing = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           
-          {/* CARD 1 */}
-          <div className="bg-white p-6 rounded-3xl shadow-xl">
-            <img
-              src="https://images.unsplash.com/photo-1607290817806-6cc75b55aeff"
-              className="rounded-lg h-40 w-full object-cover"
-            />
-            <h4 className="mt-4 text-xl font-bold">Noodles Three</h4>
-            <p className="text-gray-500 text-sm">White plate with dried shrimps</p>
-            <div className="flex justify-between items-center mt-3">
-              <span className="text-lg font-bold">$12</span>
-              <button className="bg-orange-500 text-white px-4 py-1 rounded-full">+</button>
-            </div>
-          </div>
+          {/* DYNAMIC CARDS */}
+          {topItems.length > 0 ? (
+            topItems.map(item => (
+              <div key={item._id} className="bg-white p-6 rounded-3xl shadow-xl">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="rounded-lg h-40 w-full object-cover"
+                />
+                <h4 className="mt-4 text-xl font-bold">{item.name}</h4>
+                <p className="text-gray-500 text-sm">{item.description}</p>
 
-          {/* CARD 2 */}
-          <div className="bg-white p-6 rounded-3xl shadow-xl">
-            <img
-              src="https://images.unsplash.com/photo-1589308078056-e3a8a0d57428"
-              className="rounded-lg h-40 w-full object-cover"
-            />
-            <h4 className="mt-4 text-xl font-bold">Noodles One</h4>
-            <p className="text-gray-500 text-sm">Spicy boil with seafood</p>
-            <div className="flex justify-between items-center mt-3">
-              <span className="text-lg font-bold">$20</span>
-              <button className="bg-orange-500 text-white px-4 py-1 rounded-full">+</button>
-            </div>
-          </div>
-
-          {/* CARD 3 */}
-          <div className="bg-white p-6 rounded-3xl shadow-xl">
-            <img
-              src="https://images.unsplash.com/photo-1525755662778-989d0524087e"
-              className="rounded-lg h-40 w-full object-cover"
-            />
-            <h4 className="mt-4 text-xl font-bold">Noodles Two</h4>
-            <p className="text-gray-500 text-sm">Prawn spicy soup</p>
-            <div className="flex justify-between items-center mt-3">
-              <span className="text-lg font-bold">$16</span>
-              <button className="bg-orange-500 text-white px-4 py-1 rounded-full">+</button>
-            </div>
-          </div>
+                <div className="flex justify-between items-center mt-3">
+                  <span className="text-lg font-bold">₹{item.price}</span>
+                  <button
+                    onClick={() => navigate("/menu")}
+                    className="bg-orange-500 text-white px-4 py-1 rounded-full"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            // SKELETON LOADERS (if API is slow)
+            <>
+              {[1, 2, 3].map(v => (
+                <div
+                  key={v}
+                  className="bg-white p-6 rounded-3xl shadow-xl animate-pulse"
+                >
+                  <div className="h-40 bg-gray-300 rounded-lg"></div>
+                  <div className="h-4 bg-gray-300 mt-4 w-1/2 rounded"></div>
+                  <div className="h-3 bg-gray-200 mt-3 w-3/4 rounded"></div>
+                </div>
+              ))}
+            </>
+          )}
 
         </div>
       </div>
-
     </div>
   );
 };
