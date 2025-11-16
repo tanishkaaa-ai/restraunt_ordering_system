@@ -16,21 +16,25 @@ const { login } = useAuth();
     role: "customer",
   });
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
     const res = await api.post("/auth/register", form);
 
-    const { token, user } = res.data;
+    alert("Signup successful! Please login.");
+    navigate("/login");
 
-    login(token, user.role, user);
 
-    navigate("/menu");
+    // Redirect based on role
+    
+    
   } catch (err) {
+    console.log(err);
     alert("Signup failed");
   }
 };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200 flex items-center justify-center">
