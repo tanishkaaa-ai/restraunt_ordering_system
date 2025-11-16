@@ -40,8 +40,10 @@ export default function Menu() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {items.map((food) => (
           <div key={food._id} className="bg-white shadow-xl rounded-2xl p-6">
+
+            {/* Image from FULL URL */}
             <img
-              src={`http://localhost:5000/${food.image}`}
+              src={food.image}   // <-- Works as long as DB stores full URL
               alt={food.name}
               className="rounded-xl w-full h-48 object-cover"
             />
