@@ -1,14 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-// import { CartContext } from "../../context/CartContext";
-import axios from "axios";
-
 import api from "../../utils/api";
+
 export default function Menu() {
   const [items, setItems] = useState([]);
   const { user } = useContext(AuthContext);
-  // const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +23,7 @@ export default function Menu() {
     try {
       await api.post("/cart/add", {
         itemId: item._id,
-        quantity: 1,
+        quantity: 1
       });
 
       alert("Item added to cart!");
@@ -36,7 +33,7 @@ export default function Menu() {
     }
   };
 
-   return (
+  return (
     <div className="px-10 py-14">
       <h1 className="text-4xl font-bold mb-8">Our Menu</h1>
 
@@ -44,7 +41,7 @@ export default function Menu() {
         {items.map((food) => (
           <div key={food._id} className="bg-white shadow-xl rounded-2xl p-6">
             <img
-              src={food.image}
+              src={`http://localhost:5000/${food.image}`}
               alt={food.name}
               className="rounded-xl w-full h-48 object-cover"
             />
@@ -57,12 +54,14 @@ export default function Menu() {
                 ₹{food.price}
               </span>
 
-              <button
-                onClick={() => handleAdd(food)}
-                className="px-4 py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition"
-              >
-                Add to Cart
-              </button>
+              {user?.role === "customer" && (
+                <button
+                  onClick={() => handleAdd(food)}
+                  className="px-4 py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition"
+                >
+                  Add to Cart
+                </button>
+              )}
             </div>
           </div>
         ))}
