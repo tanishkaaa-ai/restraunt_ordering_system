@@ -5,7 +5,8 @@ const CustomerAuth = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-100 to-orange-200 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFE0D3] to-[#FFBFA8] flex items-center justify-center px-4">
+
       <div className="bg-white shadow-xl rounded-xl p-8 max-w-md w-full text-center">
         
         <h1 className="text-3xl font-bold text-gray-800 mb-4">

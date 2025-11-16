@@ -38,11 +38,11 @@ export default function DeliveryOrders() {
   };
 
   return (
-    <div className="min-h-screen p-10 bg-blue-50">
+    <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       <h1 className="text-3xl font-bold mb-6">Delivery Orders</h1>
 
       {orders.length === 0 && (
-        <p className="text-gray-600">No orders available.</p>
+        <p className="text-white-600">No orders available.</p>
       )}
 
       {orders.map(order => (
@@ -67,7 +67,7 @@ export default function DeliveryOrders() {
           {!order.deliveryAgentId && (
             <button
               onClick={() => acceptOrder(order._id)}
-              className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg"
+              className="mt-4 px-4 py-2 bg-orange-600 text-white rounded-lg"
             >
               Accept Order
             </button>
@@ -76,9 +76,9 @@ export default function DeliveryOrders() {
           {order.deliveryAgentId === user.id && (
             <button
               onClick={() => markDelivered(order._id)}
-              className="mt-4 ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
+              className="mt-4 ml-4 px-4 py-2 bg-orange-600 text-white rounded-lg"
             >
-              Mark as Delivered
+            Mark as Delivered
             </button>
           )}
         </div>

@@ -50,7 +50,7 @@ const Cart = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-100 to-orange-200 p-10">
+   <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       <h1 className="text-4xl font-bold mb-8 text-gray-800">Your Cart 🛒</h1>
 
       {cart.length === 0 ? (

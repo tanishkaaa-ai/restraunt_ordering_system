@@ -12,7 +12,7 @@ export default function UsersList() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-600 via-pink-500 to-purple-700 px-8 py-12 text-white">
+     <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       <h1 className="text-5xl font-extrabold text-center mb-12">👥 All Users</h1>
 
       <div className="max-w-6xl mx-auto grid gap-10">
@@ -23,7 +23,8 @@ export default function UsersList() {
         {users.map((user) => (
           <div
             key={user._id}
-            className="p-8 bg-white/20 rounded-3xl backdrop-blur-xl border border-white/30 shadow-xl"
+           className="p-8 bg-white rounded-3xl backdrop-blur-xl border border-white/30 shadow-xl"
+
           >
             <h2 className="text-3xl font-bold">{user.name}</h2>
 
@@ -33,7 +34,7 @@ export default function UsersList() {
 
             <p className="text-xl mt-2">
               🎭 Role:
-              <span className="ml-2 px-3 py-1 bg-black/30 rounded-xl font-bold uppercase">
+              <span className="ml-2 px-3 py-1 bg-orange-400 rounded-xl font-bold uppercase">
                 {user.role}
               </span>
             </p>

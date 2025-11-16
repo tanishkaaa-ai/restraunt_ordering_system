@@ -25,7 +25,7 @@ export default function ManageMenu() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-300 to-red-300 p-10">
+   <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
 
       <h1 className="text-4xl font-bold text-white text-center mb-10">
         🍽 Manage Menu
@@ -34,7 +34,7 @@ export default function ManageMenu() {
       <div className="text-center mb-8">
         <Link
           to="/admin/add-item"
-          className="px-6 py-3 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700"
+          className="px-6 py-3 bg-orange-600 text-white rounded-xl shadow-lg hover:bg-orange-700"
         >
           ➕ Add New Item
         </Link>
@@ -59,14 +59,14 @@ export default function ManageMenu() {
             <div className="flex justify-between mt-5">
               <Link
                 to={`/admin/edit/${item._id}`}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
               >
                 Edit
               </Link>
 
               <button
                 onClick={() => handleDelete(item._id)}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
               >
                 Delete
               </button>

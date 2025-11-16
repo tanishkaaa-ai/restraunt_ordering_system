@@ -47,7 +47,7 @@ export default function MenuForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-500 via-orange-500 to-red-600 px-8 py-12 text-white">
+    <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       
       <h1 className="text-5xl font-extrabold text-center mb-12">
         {isEdit ? "✏️ Edit Food Item" : "➕ Add Food Item"}
@@ -55,7 +55,8 @@ export default function MenuForm() {
 
       <form
         onSubmit={handleSubmit}
-        className="max-w-3xl mx-auto bg-white/20 backdrop-blur-xl p-10 rounded-3xl border border-white/30"
+        className="max-w-3xl mx-auto bg-orange-300 p-10 rounded-3xl border border-white/30"
+
       >
         <input
           required
@@ -98,7 +99,7 @@ export default function MenuForm() {
 
         <button
           type="submit"
-          className="w-full py-4 bg-yellow-400 text-gray-900 rounded-xl font-bold hover:scale-105 transition"
+          className="w-full py-4 bg-orange-500 text-gray-900 rounded-xl font-bold hover:scale-105 transition"
         >
           {isEdit ? "Update Item" : "Add Item"}
         </button>

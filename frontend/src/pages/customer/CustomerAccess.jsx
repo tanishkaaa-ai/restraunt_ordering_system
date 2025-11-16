@@ -5,7 +5,7 @@ const CustomerAccess = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-100 to-orange-200 flex items-center justify-center px-4">
+    <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       <div className="bg-white shadow-xl rounded-xl p-10 w-full max-w-md text-center">
 
         <h1 className="text-3xl font-bold text-gray-800 mb-6">

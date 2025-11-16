@@ -37,7 +37,8 @@ const { login } = useAuth();
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200 flex items-center justify-center">
+   <div className="min-h-screen bg-gradient-to-br from-[#FFE5D4] via-[#FFD6C9] to-[#FFBFA8] flex items-center justify-center">
+
       <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center">
 
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Create Account</h1>
@@ -92,7 +93,7 @@ const { login } = useAuth();
           </select>
 
           <button
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold shadow-lg"
+            className="w-full bg-orange   -600 hover:bg-orange-700 text-white py-3 rounded-xl font-semibold shadow-lg"
             type="submit"
           >
             Sign Up
@@ -103,7 +104,7 @@ const { login } = useAuth();
           Already have an account?
           <span
             onClick={() => navigate("/login")}
-            className="text-blue-600 cursor-pointer font-semibold ml-2"
+            className="text-orange-600 cursor-pointer font-semibold ml-2"
           >
             Login
           </span>

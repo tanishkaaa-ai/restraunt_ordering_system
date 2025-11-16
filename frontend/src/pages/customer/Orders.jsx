@@ -26,7 +26,7 @@ const Orders = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 p-8">
+    <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       <h1 className="text-3xl font-bold text-center mb-10">My Orders 📦</h1>
 
       <div className="max-w-2xl mx-auto space-y-6">
@@ -45,7 +45,7 @@ const Orders = () => {
 
               <p className="text-gray-700 mt-2">
                 Status:{" "}
-                <span className="font-bold text-blue-600">
+                <span className="font-bold text-orange-600">
                   {order.status}
                 </span>
               </p>
@@ -56,7 +56,7 @@ const Orders = () => {
 
               <button
                 onClick={() => navigate(`/track?orderId=${order._id}`)}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
+                className="mt-4 bg-orange-500 text-white px-4 py-2 rounded-lg"
               >
                 Track Order
               </button>

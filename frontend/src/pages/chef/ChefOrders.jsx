@@ -25,14 +25,14 @@ export default function ChefOrders() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-500 via-orange-400 to-yellow-300 p-8 text-white">
+     <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
 
       <h1 className="text-5xl font-extrabold text-center mb-12">👨‍🍳 Chef Orders</h1>
 
       <div className="max-w-5xl mx-auto grid gap-8">
 
         {orders.map(order => (
-          <div key={order._id} className="p-8 bg-white/20 rounded-3xl shadow-xl backdrop-blur-xl">
+          <div key={order._id} className="p-8 bg-white rounded-3xl shadow-xl backdrop-blur-xl">
 
             <h2 className="text-3xl font-bold mb-2">
               Order #{order._id.slice(-6)}
@@ -51,14 +51,14 @@ export default function ChefOrders() {
             <div className="mt-6 flex gap-4">
               <button
                 onClick={() => updateStatus(order._id, "Preparing")}
-                className="px-5 py-2 bg-blue-500 rounded-xl"
+                className="px-5 py-2 bg-orange-500 rounded-xl"
               >
                 Preparing
               </button>
 
               <button
                 onClick={() => updateStatus(order._id, "Ready")}
-                className="px-5 py-2 bg-green-500 rounded-xl"
+                className="px-5 py-2 bg-orange-500 rounded-xl"
               >
                 Ready ✔
               </button>

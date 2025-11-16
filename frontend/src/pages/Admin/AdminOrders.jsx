@@ -11,12 +11,11 @@ export default function AdminOrders() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-700 via-pink-600 to-orange-500 px-8 py-12 text-white">
-
+     <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       <h1 className="text-5xl font-extrabold text-center mb-12">📦 All Orders</h1>
 
-      <div className="max-w-5xl mx-auto grid gap-10">
-        
+     <div className="max-w-5xl mx-auto grid gap-10 bg-[#FFD6C9] p-6 rounded-2xl">
+
         {orders.length === 0 && (
           <p className="text-center text-lg opacity-90">Loading orders...</p>
         )}
@@ -24,7 +23,9 @@ export default function AdminOrders() {
         {orders.map((order) => (
           <div
             key={order._id}
-            className="p-8 bg-white/20 rounded-3xl backdrop-blur-xl border border-white/30 shadow-xl"
+           className="p-8 bg-white rounded-3xl backdrop-blur-xl border border-white/30 shadow-xl"
+
+
           >
             <h2 className="text-3xl font-bold mb-2">
               Order #{order._id.slice(-6)}
@@ -43,7 +44,7 @@ export default function AdminOrders() {
 
             <p className="text-xl mb-3">
               🚦 Status:{" "}
-              <span className="font-bold text-yellow-300">{order.status}</span>
+              <span className="font-bold text-orange-500">{order.status}</span>
             </p>
 
           </div>

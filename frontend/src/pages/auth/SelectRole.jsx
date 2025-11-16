@@ -5,7 +5,8 @@ const SelectRole = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-yellow-200 flex justify-center items-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFE5D4] via-[#FFD6C9] to-[#FFBFA8] flex items-center justify-center">
+
       <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md text-center">
 
         <h1 className="text-3xl font-bold text-gray-800 mb-6">

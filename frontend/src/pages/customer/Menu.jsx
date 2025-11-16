@@ -34,7 +34,7 @@ export default function Menu() {
   };
 
   return (
-    <div className="px-10 py-14">
+    <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       <h1 className="text-4xl font-bold mb-8">Our Menu</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">

@@ -58,7 +58,8 @@ export default function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-200 p-10 flex justify-center">
+    <div className="min-h-screen bg-[#FFD6C9] p-10 flex justify-center">
+
 
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl">
 
@@ -120,7 +121,7 @@ export default function Checkout() {
 
         <button
           onClick={handleOrder}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl mt-6 text-xl font-semibold"
+          className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-xl mt-6 text-xl font-semibold"
         >
           Place Order
         </button>

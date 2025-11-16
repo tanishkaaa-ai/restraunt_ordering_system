@@ -20,26 +20,26 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 text-white px-8 py-16">
+     <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
       <h1 className="text-5xl font-extrabold text-center mb-14 drop-shadow-lg tracking-wide">
         🧑‍💼 Admin Control Panel
       </h1>
 
-      <p className="text-center text-lg mb-16 opacity-90">
-        Manage menu, orders, users, and system reports.
-      </p>
+      {/* <p className="text-center text-lg mb-16 opacity-90">
+          Manage menu, orders, users, and system reports.
+      </p> */}
 
       {/* STATS */}
       <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto mb-20">
-        <StatCard label="Total Orders" value={stats.totalOrders} color="bg-green-400" />
-        <StatCard label="Menu Items" value={stats.totalMenu} color="bg-blue-400" />
+        <StatCard label="Total Orders" value={stats.totalOrders} color="bg-orange-400" />
+        <StatCard label="Menu Items" value={stats.totalMenu} color="bg-orange-400" />
         <StatCard label="Customers" value={stats.totalCustomers} color="bg-orange-400" />
-        <StatCard label="Chefs" value={stats.totalChefs} color="bg-purple-400" />
-        <StatCard label="Delivery Agents" value={stats.totalDelivery} color="bg-pink-400" />
+        <StatCard label="Chefs" value={stats.totalChefs} color="bg-orange-400" />
+        <StatCard label="Delivery Agents" value={stats.totalDelivery} color="bg-orange-400" />
       </div>
 
       {/* MAIN MENU */}
-      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 bg-white-700 p-6 rounded-2xl">
         <AdminBox
           title="🍽 Manage Menu"
           text="Add, edit, or delete food items."
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="mt-20 text-center text-white/80">
-        <p className="text-sm">© 2025 Admin Portal | Designed by Tanisha 🍊</p>
+        <p className="text-sm">© 2025 Admin Portal🍊</p>
       </div>
     </div>
   );
@@ -70,11 +70,11 @@ function AdminBox({ title, text, link }) {
   return (
     <div className="group p-10 bg-white/20 hover:bg-white/30 rounded-3xl shadow-2xl backdrop-blur-lg border border-white/40 transition-all duration-300 hover:-translate-y-2">
       <h2 className="text-3xl font-bold mb-4">{title}</h2>
-      <p className="text-lg mb-8 text-white/90">{text}</p>
+      <p className="text-lg mb-8 text-#FFD6C9/90">{text}</p>
 
       <Link
         to={link}
-        className="inline-block px-8 py-3 bg-yellow-400 hover:bg-yellow-300 text-gray-900 rounded-xl font-bold transition-transform duration-200 hover:scale-105 shadow-lg"
+        className="inline-block px-8 py-3 bg-orange-400 hover:bg-orange-300 text-gray-900 rounded-xl font-bold transition-transform duration-200 hover:scale-105 shadow-lg"
       >
         Open
       </Link>

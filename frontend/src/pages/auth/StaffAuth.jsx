@@ -5,7 +5,8 @@ const StaffAuth = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-100 to-red-300 flex items-center justify-center px-4">
+     <div className="min-h-screen bg-gradient-to-br from-[#FFE5D4] via-[#FFD6C9] to-[#FFBFA8] flex items-center justify-center">
+
       <div className="bg-white shadow-xl rounded-xl p-8 max-w-md w-full text-center">
 
         <h1 className="text-3xl font-bold text-gray-800 mb-4">

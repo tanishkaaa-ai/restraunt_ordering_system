@@ -38,7 +38,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-orange-200 via-amber-200 to-red-200 p-6 flex flex-col">
+    <div className="px-10 py-14 bg-[#FFD6C9] min-h-screen">
 
       {/* HERO SECTION */}
       <div className="flex flex-col lg:flex-row items-center gap-12 px-8">
@@ -67,9 +67,9 @@ export default function Landing() {
         {/* RIGHT IMAGE */}
         <div className="flex-1 flex justify-center">
           <img
-            src="https://images.unsplash.com/photo-1604908812623-5f3f20e339cd"
+            src="https://i.pinimg.com/1200x/66/31/b0/6631b01b53589727f220ad616519c3b4.jpg"
             alt="food bowl"
-            className="rounded-full w-96 h-96 object-cover shadow-2xl border-8 border-white"
+            className="rounded-full w-96 h-96 object-cover shadow-2xl  border-orange-500"
           />
         </div>
       </div>
@@ -77,8 +77,7 @@ export default function Landing() {
       {/* TOP LIST DYNAMIC MENU */}
       <div className="mt-20 px-8">
         <h3 className="text-4xl font-semibold text-gray-800 mb-4">Top List</h3>
-        <p className="text-gray-600 mb-10">Our mainstay menu</p>
-
+      
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
           {topItems.map((food) => (
