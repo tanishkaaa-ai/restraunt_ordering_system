@@ -123,30 +123,44 @@ exports.getReadyOrders = async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 };
+// DELIVERY AGENT ACCEPT ORDER
 exports.acceptOrder = async (req, res) => {
   try {
-    const orderId = req.params.id;
-    const userId = req.user.id; // delivery agent ID
+    const order = await Order.findById(req.params.id);
 
-    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ message: "Order not found" });
 
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
+    if (order.deliveryAgentId)
+      return res.status(400).json({ message: "Already accepted by another agent" });
 
-    // Assign only if not already taken
-    if (order.deliveryAgentId && order.deliveryAgentId.toString() !== userId) {
-      return res.status(403).json({ message: "Order already assigned" });
-    }
+    order.deliveryAgentId = req.user.id;
+    order.status = "Out for Delivery";
 
-    order.deliveryAgentId = userId;
-    order.status = "Out for Delivery"; // update status
     await order.save();
 
     res.json({ message: "Order accepted", order });
 
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", err });
+  }
+};
+
+exports.markDelivered = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    if (order.deliveryAgentId.toString() !== req.user.id)
+      return res.status(403).json({ message: "Not your order" });
+
+    order.status = "Delivered";
+    await order.save();
+
+    res.json({ message: "Order delivered", order });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error", err });
   }
 };
 

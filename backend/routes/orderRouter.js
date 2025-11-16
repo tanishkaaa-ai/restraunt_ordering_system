@@ -10,7 +10,9 @@ const {
     getMyOrders,
     getAllOrders,
     updateOrderStatus,
-    getReadyOrders
+    getDeliveryOrders,
+    
+    markDelivered
 } = require("../controllers/order-controller");
 
 // CUSTOMER: Create order
@@ -28,7 +30,13 @@ router.put("/update-status/:id",
     allowRoles(["chef", "delivery", "admin"]),
     updateOrderStatus
 );
-router.get("/ready", auth, allowRoles(["delivery","admin"]), getReadyOrders);
+router.get("/delivery-orders", auth, allowRoles(["delivery"]), getDeliveryOrders);
+
+
+router.put("/accept/:id", auth, allowRoles(["delivery"]), acceptOrder);
+
+router.put("/mark-delivered/:id", auth, allowRoles(["delivery"]), markDelivered);
+
 router.post("/accept/:id",
     auth,
     allowRoles(["delivery"]),

@@ -6,93 +6,83 @@ export default function DeliveryOrders() {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
 
+  // Load READY + THIS AGENT's ORDERS
   useEffect(() => {
-    loadOrders();
+    api.get("/order/delivery-orders")
+      .then(res => setOrders(res.data))
+      .catch(err => console.log(err));
   }, []);
 
-  const loadOrders = () => {
-    api
-      .get("/dashboard/delivery/orders") // your existing backend route
-      .then((res) => setOrders(res.data))
-      .catch((err) => console.log(err));
+  const acceptOrder = (id) => {
+    api.put(`/order/accept/${id}`)
+      .then(res => {
+        alert("Order accepted!");
+
+        setOrders(prev =>
+          prev.map(o =>
+            o._id === id
+              ? { ...o, deliveryAgentId: user.id, status: "Out for Delivery" }
+              : o
+          )
+        );
+      })
+      .catch(err => console.log(err));
   };
 
-  // 1️⃣ Accept order (assign delivery agent)
-  const handleAccept = (orderId) => {
-    api
-      .put(`/order/update-status/${orderId}`, {
-        status: "Out for Delivery",
-        deliveryAgentId: user.id,
+  const markDelivered = (id) => {
+    api.put(`/order/mark-delivered/${id}`)
+      .then(() => {
+        setOrders(prev => prev.filter(o => o._id !== id));
       })
-      .then(() => loadOrders())
-      .catch((err) => console.log(err));
-  };
-
-  // 2️⃣ Mark Delivered (only if assigned to THIS agent)
-  const markDelivered = (orderId) => {
-    api
-      .put(`/order/update-status/${orderId}`, {
-        status: "Delivered",
-      })
-      .then(() => loadOrders())
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 p-8">
-      <h1 className="text-4xl font-bold mb-6">Delivery Orders</h1>
+    <div className="min-h-screen p-10 bg-blue-50">
+      <h1 className="text-3xl font-bold mb-6">Delivery Orders</h1>
 
-      <div className="grid gap-6">
-        {orders.map((order) => {
-          const isAssignedToMe = order.deliveryAgentId === user.id;
+      {orders.length === 0 && (
+        <p className="text-gray-600">No orders available.</p>
+      )}
 
-          return (
-            <div
-              key={order._id}
-              className="bg-white p-6 rounded-xl shadow-md border"
+      {orders.map(order => (
+        <div key={order._id} className="bg-white p-6 shadow rounded-xl mb-6">
+
+          <h2 className="text-xl font-bold">
+            Order #{order._id.slice(-6)}
+          </h2>
+
+          <p className="mt-2 text-gray-700">
+            Customer: {order.userId?.name}
+          </p>
+
+          <p className="text-gray-700">
+            Total: ₹{order.totalAmount}
+          </p>
+
+          <p className="text-gray-700 font-semibold">
+            Status: {order.status}
+          </p>
+
+          {!order.deliveryAgentId && (
+            <button
+              onClick={() => acceptOrder(order._id)}
+              className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg"
             >
-              <h2 className="text-xl font-bold">
-                Order #{order._id.slice(-6)}
-              </h2>
+              Accept Order
+            </button>
+          )}
 
-              <p className="text-gray-600 mt-2">
-                <b>Status:</b> {order.status}
-              </p>
-
-              {/* 1️⃣ Not Assigned → show ACCEPT button */}
-              {!order.deliveryAgentId && (
-                <button
-                  onClick={() => handleAccept(order._id)}
-                  className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg"
-                >
-                  ACCEPT ORDER
-                </button>
-              )}
-
-              {/* 2️⃣ Assigned to me → show Deliver buttons */}
-              {order.deliveryAgentId && isAssignedToMe && (
-                <div className="mt-4 flex gap-3">
-                  {order.status === "Out for Delivery" && (
-                    <button
-                      onClick={() => markDelivered(order._id)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-                    >
-                      MARK DELIVERED
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {/* ❌ Assigned to someone else → no buttons */}
-              {order.deliveryAgentId && !isAssignedToMe && (
-                <p className="text-red-500 mt-3 text-sm">
-                  Assigned to another delivery agent
-                </p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+          {order.deliveryAgentId === user.id && (
+            <button
+              onClick={() => markDelivered(order._id)}
+              className="mt-4 ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Mark as Delivered
+            </button>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
